@@ -93,5 +93,17 @@ class CuentaTest {
         assertEquals("1000.8989", cuenta2.getSaldo().toPlainString());
         assertEquals("3000", cuenta1.getSaldo().toPlainString());
         assertEquals(2,banco.getCuentas().size());
+
+        assertEquals("Banco del estado", cuenta1.getBanco().getNombre());
+        assertEquals("Darwin", banco.getCuentas().stream()
+                .filter(c -> c.getPersona().equals("Darwin"))
+                .findFirst()
+                .get().getPersona());
+        assertTrue(banco.getCuentas().stream()
+                .filter(c -> c.getPersona().equals("Darwin"))
+                .findFirst().isPresent());
+        assertTrue(banco.getCuentas().stream()
+                .anyMatch(c-> c.getPersona().equals("Darwin")));
+
     }
 }
