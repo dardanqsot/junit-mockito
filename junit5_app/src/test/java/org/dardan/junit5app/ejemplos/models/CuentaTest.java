@@ -15,9 +15,9 @@ class CuentaTest {
         //cuenta.setPersona("Andres");
         String esperado = "Darwin";
         String real = cuenta.getPersona();
-        assertNotNull(real);
-        assertEquals(esperado, real);
-        assertTrue(real.equals("Darwin"));
+        assertNotNull(real, () -> "La cuenta no puede ser nula");
+        assertEquals(esperado, real, () -> "El metodo de la cuenta no es el que se esperaba " + esperado + " sin embargo fue " + real);
+        assertTrue(real.equals("Darwin"), () -> "Nombre cuenta esperada debe ser igual a la real");
     }
 
     @Test
@@ -90,8 +90,8 @@ class CuentaTest {
         banco.addCuenta(cuenta2);
         banco.setNombre("Banco del estado");
         banco.transferir(cuenta2, cuenta1, new BigDecimal(500));
-        assertAll(() -> assertEquals("1000.8989", cuenta2.getSaldo().toPlainString()),
-                () -> assertEquals("3000", cuenta1.getSaldo().toPlainString()),
+        assertAll(() -> assertEquals("1000.8989", cuenta2.getSaldo().toPlainString(), () -> "El valor del saldo de la cuenta2 no es el esperado"),
+                () -> assertEquals("3000", cuenta1.getSaldo().toPlainString(), () -> "El valor del saldo de la cuenta1 no es el esperado"),
                 () -> assertEquals(2, banco.getCuentas().size()),
                 () -> assertEquals("Banco del estado", cuenta1.getBanco().getNombre()),
                 () -> assertEquals("Darwin", banco.getCuentas().stream()
