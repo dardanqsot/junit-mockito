@@ -59,11 +59,11 @@ class CuentaTest {
     @Test
     void testDineroInsuficienteExceptionCuenta() {
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000.12345"));
-        Exception exception = assertThrows(DineroInsuficienteException.class, ()-> {
-           cuenta.debito(new BigDecimal(1500));
+        Exception exception = assertThrows(DineroInsuficienteException.class, () -> {
+            cuenta.debito(new BigDecimal(1500));
         });
 
-        String actual =  exception.getMessage();
+        String actual = exception.getMessage();
         String esperado = "Dinero Insuficiente";
         assertEquals(esperado, actual);
     }
@@ -90,20 +90,19 @@ class CuentaTest {
         banco.addCuenta(cuenta2);
         banco.setNombre("Banco del estado");
         banco.transferir(cuenta2, cuenta1, new BigDecimal(500));
-        assertEquals("1000.8989", cuenta2.getSaldo().toPlainString());
-        assertEquals("3000", cuenta1.getSaldo().toPlainString());
-        assertEquals(2,banco.getCuentas().size());
-
-        assertEquals("Banco del estado", cuenta1.getBanco().getNombre());
-        assertEquals("Darwin", banco.getCuentas().stream()
-                .filter(c -> c.getPersona().equals("Darwin"))
-                .findFirst()
-                .get().getPersona());
-        assertTrue(banco.getCuentas().stream()
-                .filter(c -> c.getPersona().equals("Darwin"))
-                .findFirst().isPresent());
-        assertTrue(banco.getCuentas().stream()
-                .anyMatch(c-> c.getPersona().equals("Darwin")));
-
+        assertAll(() -> assertEquals("1000.8989", cuenta2.getSaldo().toPlainString()),
+                () -> assertEquals("3000", cuenta1.getSaldo().toPlainString()),
+                () -> assertEquals(2, banco.getCuentas().size()),
+                () -> assertEquals("Banco del estado", cuenta1.getBanco().getNombre()),
+                () -> assertEquals("Darwin", banco.getCuentas().stream()
+                        .filter(c -> c.getPersona().equals("Darwin"))
+                        .findFirst()
+                        .get().getPersona()),
+                () -> assertTrue(banco.getCuentas().stream()
+                        .filter(c -> c.getPersona().equals("Darwin"))
+                        .findFirst().isPresent()),
+                () -> assertTrue(banco.getCuentas().stream()
+                        .anyMatch(c -> c.getPersona().equals("Darwin"))))
+        ;
     }
 }
