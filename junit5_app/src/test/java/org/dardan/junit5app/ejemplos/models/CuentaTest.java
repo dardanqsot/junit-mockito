@@ -1,20 +1,30 @@
 package org.dardan.junit5app.ejemplos.models;
 
 import org.dardan.junit5app.ejemplos.exceptions.DineroInsuficienteException;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CuentaTest {
+    Cuenta cuenta;
+
+    @BeforeEach
+    void initMetodoTest() {
+        System.out.println("Iniciando el método.");
+        this.cuenta = new Cuenta("Darwin", new BigDecimal("1000.12345"));
+
+    }
+
+    @AfterEach
+    void tearDown() {
+        System.out.println("Finalizando el metodo de prueba");
+    }
 
     @Test
     @DisplayName("Probando el nombre de la cuenta corriente!")
     void testNombreCuenta() {
-        Cuenta cuenta = new Cuenta("Darwin", new BigDecimal("1000.12345"));
         //cuenta.setPersona("Andres");
         String esperado = "Darwin";
         String real = cuenta.getPersona();
@@ -26,7 +36,7 @@ class CuentaTest {
     @Test
     @DisplayName("Probando el saldo de la cuenta, que no sea null, mayor que cero, valor esperado.")
     void testSaldoCuenta() {
-        Cuenta cuenta = new Cuenta("Darwin", new BigDecimal("1000.12345"));
+        cuenta = new Cuenta("Darwin", new BigDecimal("1000.12345"));
         assertNotNull(cuenta.getSaldo());
         assertEquals(1000.12345, cuenta.getSaldo().doubleValue());
         assertFalse(cuenta.getSaldo().compareTo(BigDecimal.ZERO) < 0);
@@ -35,7 +45,7 @@ class CuentaTest {
 
     @Test
     void testReferenciaCuenta() {
-        Cuenta cuenta = new Cuenta("John Doe", new BigDecimal("8900.9997"));
+        cuenta = new Cuenta("John Doe", new BigDecimal("8900.9997"));
         Cuenta cuenta2 = new Cuenta("John Doe", new BigDecimal("8900.9997"));
 
 //        assertNotEquals(cuenta2, cuenta);
@@ -44,7 +54,6 @@ class CuentaTest {
 
     @Test
     void testDebitoCuenta() {
-        Cuenta cuenta = new Cuenta("Darwin", new BigDecimal("1000.12345"));
         cuenta.debito(new BigDecimal(100));
         assertNotNull(cuenta.getSaldo());
         assertEquals(900, cuenta.getSaldo().intValue());
@@ -53,7 +62,6 @@ class CuentaTest {
 
     @Test
     void testCreditoCuenta() {
-        Cuenta cuenta = new Cuenta("Darwin", new BigDecimal("1000.12345"));
         cuenta.credito(new BigDecimal(100));
         assertNotNull(cuenta.getSaldo());
         assertEquals(1100, cuenta.getSaldo().intValue());
@@ -86,9 +94,9 @@ class CuentaTest {
 
     @Test
     @Disabled
-    @DisplayName("Probando el assertAll")
+    //@DisplayName("Probando el assertAll")
     void testRelacionBancoCuentas() {
-        fail();
+      //  fail();
         Cuenta cuenta1 = new Cuenta("Jhon Doe", new BigDecimal("2500"));
         Cuenta cuenta2 = new Cuenta("Darwin", new BigDecimal("1500.8989"));
 
