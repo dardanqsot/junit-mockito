@@ -2,8 +2,10 @@ package org.dardan.junit5app.ejemplos.models;
 
 import org.dardan.junit5app.ejemplos.exceptions.DineroInsuficienteException;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.*;
 
 import java.math.BigDecimal;
+import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -103,8 +105,8 @@ class CuentaTest {
     }
 
     @Test
-    @Disabled
-    //@DisplayName("Probando el assertAll")
+    //@Disabled
+    @DisplayName("Probando el assertAll")
     void testRelacionBancoCuentas() {
       //  fail();
         Cuenta cuenta1 = new Cuenta("Jhon Doe", new BigDecimal("2500"));
@@ -129,5 +131,56 @@ class CuentaTest {
                 () -> assertTrue(banco.getCuentas().stream()
                         .anyMatch(c -> c.getPersona().equals("Darwin"))))
         ;
+    }
+
+    @Test
+    @EnabledOnOs(OS.WINDOWS)
+    void testSoloWindows() {
+    }
+
+    @Test
+    @EnabledOnOs({OS.LINUX, OS.MAC})
+    void testSoloLinuxMac() {
+    }
+
+    @Test
+    @DisabledOnOs(OS.WINDOWS)
+    void testNoWindows() {
+    }
+
+    @Test
+    @EnabledOnJre(JRE.JAVA_8)
+    void soloJdk8() {
+    }
+
+    @Test
+    @EnabledOnJre(JRE.JAVA_18)
+    void soloJdk18() {
+    }
+
+    @Test
+    @DisabledOnJre(JRE.JAVA_18)
+    void testNoJdk18() {
+    }
+
+    @Test
+    void imprimirSystemProperties() {
+        Properties properties = System.getProperties();
+        properties.forEach((k,v) -> System.out.println(k + ":" + v));
+    }
+
+    @Test
+    @EnabledIfSystemProperty(named = "java.version", matches=".*18")
+    void testJavaVersion() {
+    }
+
+    @Test
+    @DisabledIfSystemProperty(named = "os.arch", matches=".*32")
+    void testSolo64() {
+    }
+
+    @Test
+    @EnabledIfSystemProperty(named = "ENV", matches = "dev")
+    void testDev() {
     }
 }
