@@ -3,6 +3,8 @@ package org.dardan.appmockito.ejemplos.services;
 import org.dardan.appmockito.ejemplos.models.Examen;
 import org.dardan.appmockito.ejemplos.repositories.ExamenRepository;
 import org.dardan.appmockito.ejemplos.repositories.ExamenRepositoryOtro;
+import org.dardan.appmockito.ejemplos.repositories.PreguntasRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -17,20 +19,35 @@ import static org.mockito.Mockito.*;
 
 class ExamenServiceImplTest {
 
+    ExamenRepository repository;
+    ExamenService service;
+    PreguntasRepository preguntasRepository;
+
+    @BeforeEach
+    void setUp() {
+        repository = mock(ExamenRepository.class);
+        preguntasRepository = mock(PreguntasRepository.class);
+        service = new ExamenServiceImpl(repository, preguntasRepository);
+    }
+
     @Test
     void findExamenPorNombre() {
 
-        ExamenRepository repository = mock(ExamenRepository.class);
-        ExamenService service =  new ExamenServiceImpl(repository);
-        List<Examen> datos = Arrays.asList(new Examen(5L, "Matematicas"), new Examen(6L, "Lenguaje"),
-                new Examen(7L, "Historia"));
 
-        when(repository.findAll()).thenReturn(datos);
-
-        Optional<Examen> examen = service.findExamenPorNombre("Matematicas");
-
+        //when(repository.findAll()).thenReturn(Datos.EXAMENES);
+        Optional<Examen> examen = service.findExamenPorNombre("Matemáticas");
         assertTrue(examen.isPresent());
         assertEquals(5L, examen.orElseThrow().getId());
-        assertEquals("Matematicas", examen.get().getNombre());
+        assertEquals("Matemáticas", examen.get().getNombre());
+    }
+
+    @Test
+    void findExamenPorNombreListaVacia() {
+        List<Examen> datos = Collections.emptyList();
+
+        when(repository.findAll()).thenReturn(datos);
+        Optional<Examen> examen = service.findExamenPorNombre("Matemáticas");
+
+        assertFalse(examen.isPresent());
     }
 }
