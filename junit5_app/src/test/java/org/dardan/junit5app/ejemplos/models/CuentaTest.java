@@ -30,7 +30,7 @@ class CuentaTest {
 
     @BeforeEach
     void initMetodoTest(TestInfo testInfo, TestReporter testReporter) {
-        this.cuenta = new Cuenta("Andres", new BigDecimal("1000.12345"));
+        this.cuenta = new Cuenta("Darwin", new BigDecimal("1000.12345"));
         this.testInfo = testInfo;
         this.testReporter = testReporter;
         System.out.println("iniciando el metodo.");
@@ -65,7 +65,7 @@ class CuentaTest {
             if (testInfo.getTags().contains("cuenta")) {
                 testReporter.publishEntry("hacer algo con la etiqueta cuenta");
             }
-//        cuenta.setPersona("Andres");
+//        cuenta.setPersona("Darwin");
             String esperado = "Darwin";
             String real = cuenta.getPersona();
             assertNotNull(real, () -> "la cuenta no puede ser nula");
