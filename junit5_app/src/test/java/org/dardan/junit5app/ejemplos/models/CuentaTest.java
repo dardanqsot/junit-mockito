@@ -286,6 +286,7 @@ class CuentaTest {
         assertEquals("900.12345", cuenta.getSaldo().toPlainString());
     }
 
+    @Tag("param")
     @Nested
     class PruebasParametrizadasTest{
 
