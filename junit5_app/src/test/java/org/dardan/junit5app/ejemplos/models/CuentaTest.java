@@ -23,11 +23,17 @@ import static org.junit.jupiter.api.Assumptions.assumingThat;
 class CuentaTest {
     Cuenta cuenta;
 
-    @BeforeEach
-    void initMetodoTest() {
-        System.out.println("Iniciando el método.");
-        this.cuenta = new Cuenta("Darwin", new BigDecimal("1000.12345"));
+    private TestInfo testInfo;
+    private TestReporter testReporter;
 
+    @BeforeEach
+    void initMetodoTest(TestInfo testInfo, TestReporter testReporter) {
+        this.cuenta = new Cuenta("Andres", new BigDecimal("1000.12345"));
+        this.testInfo = testInfo;
+        this.testReporter = testReporter;
+        System.out.println("iniciando el metodo.");
+        testReporter.publishEntry(" ejecutando: " + testInfo.getDisplayName() + " " + testInfo.getTestMethod().orElse(null).getName()
+                + " con las etiquetas " + testInfo.getTags());
     }
 
     @AfterEach
@@ -49,6 +55,22 @@ class CuentaTest {
     @Nested
     @DisplayName("probando atributos de la cuenta corriente")
     class CuentaTestNombreSaldo{
+
+        @Test
+        @DisplayName("el nombre!")
+        void testNombreCuenta() {
+            testReporter.publishEntry(testInfo.getTags().toString());
+            if (testInfo.getTags().contains("cuenta")) {
+                testReporter.publishEntry("hacer algo con la etiqueta cuenta");
+            }
+//        cuenta.setPersona("Andres");
+            String esperado = "Darwin";
+            String real = cuenta.getPersona();
+            assertNotNull(real, () -> "la cuenta no puede ser nula");
+            assertEquals(esperado, real, () -> "el nombre de la cuenta no es el que se esperaba: se esperaba " + esperado
+                    + " sin embargo fue " + real);
+            assertTrue(real.equals("Darwin"), () -> "nombre cuenta esperada debe ser igual a la real");
+        }
 
         @Test
         @DisplayName("el saldo, que no sea null, mayor que cero, valor esperado.")
