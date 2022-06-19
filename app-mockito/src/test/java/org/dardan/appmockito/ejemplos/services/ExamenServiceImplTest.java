@@ -53,7 +53,7 @@ class ExamenServiceImplTest {
     @Test
     void testPreguntasExamen() {
         when(repository.findAll()).thenReturn(Datos.EXAMENES);
-        when(preguntaRepository.findPreguntasPorExamenId(7L)).thenReturn(Datos.PREGUNTAS);
+        when(preguntaRepository.findPreguntasPorExamenId(anyLong())).thenReturn(Datos.PREGUNTAS);
         Examen examen = service.findExamenPorNombreConPreguntas("Matemáticas");
         assertEquals(5, examen.getPreguntas().size());
         assertTrue(examen.getPreguntas().contains("integrales"));
