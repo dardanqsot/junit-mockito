@@ -142,4 +142,17 @@ class ExamenServiceImplTest {
 
     }
 
+    @Test
+    void testArgumentMatchers() {
+        when(repository.findAll()).thenReturn(Datos.EXAMENES);
+        when(preguntaRepository.findPreguntasPorExamenId(anyLong())).thenReturn(Datos.PREGUNTAS);
+        service.findExamenPorNombreConPreguntas("Matemáticas");
+
+        verify(repository).findAll();
+//        verify(preguntaRepository).findPreguntasPorExamenId(argThat(arg -> arg != null && arg.equals(5L)));
+        verify(preguntaRepository).findPreguntasPorExamenId(argThat(arg -> arg != null && arg >= 5L));
+//        verify(preguntaRepository).findPreguntasPorExamenId(eq(5L));
+
+    }
+
 }
