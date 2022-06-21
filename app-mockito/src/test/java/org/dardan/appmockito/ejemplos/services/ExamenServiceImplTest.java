@@ -11,7 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -103,8 +105,8 @@ class ExamenServiceImplTest {
         Examen newExamen = Datos.EXAMEN;
         newExamen.setPreguntas(Datos.PREGUNTAS);
 
-        when(repository.guardar(any(Examen.class))).thenReturn(Datos.EXAMEN);
-/*
+        when(repository.guardar(any(Examen.class))).then(new Answer<Examen>(){
+
             Long secuencia = 8L;
 
             @Override
@@ -114,7 +116,6 @@ class ExamenServiceImplTest {
                 return examen;
             }
         });
-*/
         // When
         Examen examen = service.guardar(newExamen);
 
