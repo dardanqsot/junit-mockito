@@ -6,8 +6,12 @@ import org.dardan.appmockito.ejemplos.repositories.ExamenRepositoryOtro;
 import org.dardan.appmockito.ejemplos.repositories.PreguntasRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,17 +21,24 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class ExamenServiceImplTest {
 
+    @Mock
     ExamenRepository repository;
-    ExamenService service;
+    @Mock
     PreguntasRepository preguntaRepository;
+
+    @InjectMocks
+    ExamenServiceImpl service;
+
 
     @BeforeEach
     void setUp() {
-        repository = mock(ExamenRepository.class);
-        preguntaRepository = mock(PreguntasRepository.class);
-        service = new ExamenServiceImpl(repository, preguntaRepository);
+//        MockitoAnnotations.openMocks(this);
+//        repository = mock(ExamenRepository.class);
+//        preguntaRepository = mock(PreguntasRepository.class);
+//        service = new ExamenServiceImpl(repository, preguntaRepository);
     }
 
     @Test
