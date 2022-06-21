@@ -97,4 +97,34 @@ class ExamenServiceImplTest {
         verify(preguntaRepository).findPreguntasPorExamenId(5L);
     }
 
+    @Test
+    void testGuardarExamen() {
+        // Given
+        Examen newExamen = Datos.EXAMEN;
+        newExamen.setPreguntas(Datos.PREGUNTAS);
+
+        when(repository.guardar(any(Examen.class))).thenReturn(Datos.EXAMEN);
+/*
+            Long secuencia = 8L;
+
+            @Override
+            public Examen answer(InvocationOnMock invocation) throws Throwable {
+                Examen examen = invocation.getArgument(0);
+                examen.setId(secuencia++);
+                return examen;
+            }
+        });
+*/
+        // When
+        Examen examen = service.guardar(newExamen);
+
+        // Then
+        assertNotNull(examen.getId());
+        assertEquals(8L, examen.getId());
+        assertEquals("Física", examen.getNombre());
+
+        verify(repository).guardar(any(Examen.class));
+        verify(preguntaRepository).guardarVarias(anyList());
+    }
+
 }
