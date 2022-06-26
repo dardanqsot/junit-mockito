@@ -1,4 +1,4 @@
-package org.dardan.appmockito.ejemplos.services;
+package org.dardan.appmockito.ejemplos;
 
 import org.dardan.appmockito.ejemplos.models.Examen;
 

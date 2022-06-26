@@ -1,8 +1,10 @@
 package org.dardan.appmockito.ejemplos.services;
 
+import org.dardan.appmockito.ejemplos.Datos;
 import org.dardan.appmockito.ejemplos.models.Examen;
 import org.dardan.appmockito.ejemplos.repositories.ExamenRepository;
-import org.dardan.appmockito.ejemplos.repositories.ExamenRepositoryOtro;
+import org.dardan.appmockito.ejemplos.repositories.ExamenRepositoryImpl;
+import org.dardan.appmockito.ejemplos.repositories.PreguntaRepositoryImpl;
 import org.dardan.appmockito.ejemplos.repositories.PreguntasRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +14,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +25,9 @@ import static org.mockito.Mockito.*;
 class ExamenServiceImplTest {
 
     @Mock
-    ExamenRepository repository;
+    ExamenRepositoryImpl repository;
     @Mock
-    PreguntasRepository preguntaRepository;
+    PreguntaRepositoryImpl preguntaRepository;
 
     @InjectMocks
     ExamenServiceImpl service;
@@ -264,5 +265,17 @@ class ExamenServiceImplTest {
         verify(repository).guardar(any(Examen.class));
         verify(preguntaRepository).guardarVarias(anyList());
     }
+
+    @Test
+    void testDoCallRealMethod() {
+        when(repository.findAll()).thenReturn(Datos.EXAMENES);
+//        when(preguntaRepository.findPreguntasPorExamenId(anyLong())).thenReturn(Datos.PREGUNTAS);
+        doCallRealMethod().when(preguntaRepository).findPreguntasPorExamenId(anyLong());
+        Examen examen = service.findExamenPorNombreConPreguntas("Matemáticas");
+        assertEquals(5L, examen.getId());
+        assertEquals("Matemáticas", examen.getNombre());
+
+    }
+
 
 }
