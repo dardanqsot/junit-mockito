@@ -16,8 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.math.BigDecimal;
 
 import static com.dardan.test.springboot.app.Datos.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -111,5 +110,18 @@ class SpringbootTestApplicationTests {
         verify(cuentaRepository, never()).findAll();
     }
 
+    @Test
+    void contextLoads3() {
+        when(cuentaRepository.findById(1L)).thenReturn(crearCuenta001());
 
+        Cuenta cuenta1 = service.findById(1L);
+        Cuenta cuenta2 = service.findById(1L);
+
+        assertSame(cuenta1, cuenta2);
+        assertTrue(cuenta1 == cuenta2);
+        assertEquals("Andrés", cuenta1.getPersona());
+        assertEquals("Andrés", cuenta2.getPersona());
+
+        verify(cuentaRepository, times(2)).findById(1L);
+    }
 }
