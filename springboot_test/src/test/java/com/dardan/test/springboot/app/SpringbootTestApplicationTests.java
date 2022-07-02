@@ -1,5 +1,7 @@
 package com.dardan.test.springboot.app;
 
+import com.dardan.test.springboot.app.models.Banco;
+import com.dardan.test.springboot.app.models.Cuenta;
 import com.dardan.test.springboot.app.repositories.BancoRepository;
 import com.dardan.test.springboot.app.repositories.CuentaRepository;
 import com.dardan.test.springboot.app.services.CuentaService;
@@ -14,23 +16,25 @@ import java.math.BigDecimal;
 
 import static com.dardan.test.springboot.app.Datos.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class SpringbootTestApplicationTests {
 
+    @MockBean
     CuentaRepository cuentaRepository;
 
+    @MockBean
     BancoRepository bancoRepository;
 
+    @Autowired
     CuentaService service;
 
     @BeforeEach
     void setUp() {
-		cuentaRepository = mock(CuentaRepository.class);
-		bancoRepository = mock(BancoRepository.class);
-		service = new CuentaServiceImpl(cuentaRepository, bancoRepository);
+//		cuentaRepository = mock(CuentaRepository.class);
+//		bancoRepository = mock(BancoRepository.class);
+//		service = new CuentaServiceImpl(cuentaRepository, bancoRepository);
 //		Datos.CUENTA_001.setSaldo(new BigDecimal("1000"));
 //		Datos.CUENTA_002.setSaldo(new BigDecimal("2000"));
 //		Datos.BANCO.setTotalTransferencias(0);
@@ -57,6 +61,16 @@ class SpringbootTestApplicationTests {
 
         int total = service.revisarTotalTransferencias(1L);
         assertEquals(1, total);
+
+        verify(cuentaRepository, times(3)).findById(1L);
+        verify(cuentaRepository, times(3)).findById(2L);
+        verify(cuentaRepository, times(2)).update(any(Cuenta.class));
+
+        verify(bancoRepository, times(2)).findById(1L);
+        verify(bancoRepository).update(any(Banco.class));
+
+        verify(cuentaRepository, times(6)).findById(anyLong());
+        verify(cuentaRepository, never()).findAll();
 
     }
 
