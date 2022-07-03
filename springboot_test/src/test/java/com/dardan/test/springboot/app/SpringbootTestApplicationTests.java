@@ -119,8 +119,8 @@ class SpringbootTestApplicationTests {
 
         assertSame(cuenta1, cuenta2);
         assertTrue(cuenta1 == cuenta2);
-        assertEquals("Andrés", cuenta1.getPersona());
-        assertEquals("Andrés", cuenta2.getPersona());
+        assertEquals("Darwin", cuenta1.getPersona());
+        assertEquals("Darwin", cuenta2.getPersona());
 
         verify(cuentaRepository, times(2)).findById(1L);
     }
