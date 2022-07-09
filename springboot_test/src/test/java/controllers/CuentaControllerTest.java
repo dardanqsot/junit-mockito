@@ -60,4 +60,39 @@ class CuentaControllerTest {
         verify(cuentaService).findById(1L);
     }
 
+    @Test
+    void testTransferir() throws Exception, JsonProcessingException {
+
+        // Given
+        TransaccionDto dto = new TransaccionDto();
+        dto.setCuentaOrigenId(1L);
+        dto.setCuentaDestinoId(2L);
+        dto.setMonto(new BigDecimal("100"));
+        dto.setBancoId(1L);
+
+        System.out.println(objectMapper.writeValueAsString(dto));
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("date", LocalDate.now().toString());
+        response.put("status", "OK");
+        response.put("mensaje", "Transferencia realizada con éxito!");
+        response.put("transaccion", dto);
+
+        System.out.println(objectMapper.writeValueAsString(response));
+
+        // When
+        mvc.perform(post("/api/cuentas/transferir")
+                .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(dto)))
+
+        // Then
+        .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.mensaje").value("Transferencia realizada con éxito!"))
+                .andExpect(jsonPath("$.transaccion.cuentaOrigenId").value(dto.getCuentaOrigenId()))
+        .andExpect(content().json(objectMapper.writeValueAsString(response)));
+
+    }
+
 }
