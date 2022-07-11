@@ -144,4 +144,24 @@ class SpringbootTestApplicationTests {
         verify(cuentaRepository).findAll();
     }
 
+    @Test
+    void testSave() {
+        // given
+        Cuenta cuentaPepe = new Cuenta(null, "Pepe", new BigDecimal("3000"));
+        when(cuentaRepository.save(any())).then(invocation ->{
+            Cuenta c = invocation.getArgument(0);
+            c.setId(3L);
+            return c;
+        });
+
+        // when
+        Cuenta cuenta = service.save(cuentaPepe);
+        // then
+        assertEquals("Pepe", cuenta.getPersona());
+        assertEquals(3, cuenta.getId());
+        assertEquals("3000", cuenta.getSaldo().toPlainString());
+
+        verify(cuentaRepository).save(any());
+    }
+
 }
