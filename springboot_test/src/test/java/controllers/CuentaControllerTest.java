@@ -117,4 +117,27 @@ class CuentaControllerTest {
 
         verify(cuentaService).findAll();
     }
+
+    @Test
+    void testGuardar() throws Exception {
+        // Given
+        Cuenta cuenta = new Cuenta(null, "Pepe", new BigDecimal("3000"));
+        when(cuentaService.save(any())).then(invocation ->{
+            Cuenta c = invocation.getArgument(0);
+            c.setId(3L);
+            return c;
+        });
+
+        // when
+        mvc.perform(post("/api/cuentas").contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cuenta)))
+                // Then
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(3)))
+                .andExpect(jsonPath("$.persona", is("Pepe")))
+                .andExpect(jsonPath("$.saldo", is(3000)));
+        verify(cuentaService).save(any());
+
+    }
 }
