@@ -108,7 +108,7 @@ class CuentaControllerTest {
                 // Then
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].persona").value("Andrés"))
+                .andExpect(jsonPath("$[0].persona").value("Darwin"))
                 .andExpect(jsonPath("$[1].persona").value("Jhon"))
                 .andExpect(jsonPath("$[0].saldo").value("1000"))
                 .andExpect(jsonPath("$[1].saldo").value("2000"))
